@@ -9,11 +9,6 @@ var getBookings = function (bookings, hotel_id, room_type) {
 };
 var bookedRooms = function (bookings, arrival, departure) {
     var books;
-    // count bookings that arrive before and leave after the new arrival
-    // if this is less than number of rooms, return number of available rooms.
-    // if departure is not known, count bookings that arrive before and leave after arrival,
-    // subtract from available rooms. return that number of rooms.
-    // arrival < arrival and departure > arrival
     if (departure === undefined) {
         books = bookings.filter(function (booking) {
             return (parseInt(booking.departure) > parseInt(arrival) &&
@@ -26,53 +21,8 @@ var bookedRooms = function (bookings, arrival, departure) {
             return (parseInt(booking.arrival) < parseInt(departure) &&
                 parseInt(arrival) <= parseInt(booking.departure));
         });
-        // // arrival < arrival and departure > departure
-        // books.push(
-        //   bookings.filter((booking) => {
-        //     return (
-        //       parseInt(booking.arrival) <= parseInt(arrival) &&
-        //       parseInt(booking.departure) > parseInt(departure)
-        //     );
-        //   })
-        // );
-        // //arrival < arrival and departure < departure
-        // books.push(
-        //   bookings.filter((booking) => {
-        //     return (
-        //       parseInt(booking.arrival) <= parseInt(arrival) &&
-        //       parseInt(booking.departure) < parseInt(departure)
-        //     );
-        //   })
-        // );
-        // // arrival > arrival and departure < departure
-        // books.push(
-        //   bookings.filter((booking) => {
-        //     return (
-        //       parseInt(booking.arrival) >= parseInt(arrival) &&
-        //       parseInt(booking.departure) < parseInt(departure)
-        //     );
-        //   })
-        // );
-        // // arrival > arrival and departure > departure
-        // books.push(
-        //   bookings.filter((booking) => {
-        //     return (
-        //       parseInt(booking.arrival) >= parseInt(arrival) &&
-        //       parseInt(booking.departure) > parseInt(departure)
-        //     );
-        //   })
-        // );
     }
-    // if departure and arrival are known
-    // keep bookings where: arrival < arrival, and departure > departure
-    // arrival > arrival and departure < departure
-    // arrival < arrival and departure < departure
-    // arrival > arrival and departure > departure
-    // subtract from available rooms return number of rooms
-    // First check which bookings overlap with the new potential booking
-    // assigns list to books of bookings that arrive before new booking
-    // or leave after new booking
-    return books; //.flat();
+    return books;
 };
 var parseBookings = function (hotel_id, room_type, rooms, bookings, arrival, departure) {
     var currBookings = getBookings(bookings, hotel_id, room_type);
@@ -82,7 +32,7 @@ var parseBookings = function (hotel_id, room_type, rooms, bookings, arrival, dep
     }
     var overlappingBookings;
     if (departure === undefined) {
-        console.log("these results are more trustworthy when you suplly an intended departure date");
+        console.log("these results are more trustworthy when you supply an intended departure date");
         overlappingBookings = bookedRooms(currBookings, arrival);
     }
     else {
