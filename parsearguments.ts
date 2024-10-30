@@ -4,8 +4,11 @@ const displayHelp = (): void => {
   );
   console.log("for help type: node app.js -help ");
   console.log("To get availability type:");
-  console.log("node app.js -hotel <hotelname> -date <date> -room <roomtype>");
-  console.log("For example: node app.js -hotel H1 -date 20240901 -room SGL");
+  console.log(
+    "node app.js -hotel <hotelname> -arrival <arrival date> -departure <departure date> -room <roomtype>"
+  );
+  console.log("The departure date is optional");
+  console.log("For example: node app.js -hotel H1 -arrival 20240901 -room SGL");
 
   return;
 };
