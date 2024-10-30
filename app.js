@@ -4,14 +4,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var hotels = require("./data/hotels.json");
 var bookings = require("./data/bookings.json");
 var args = process.argv;
-var searchHotels = function (hotel_name, all_hotels) {
-    var foundHotel = all_hotels.filter(function (hotel) { return hotel.id == hotel_name; })[0];
-    return foundHotel;
-};
-var searchRooms = function (room_name, rooms) {
-    var foundRooms = rooms.filter(function (room) { return room.roomType == room_name; });
-    return foundRooms;
-};
+var parsearguments_1 = require("./parsearguments");
+var parsebookings_1 = require("./parsebookings");
 var getBookings = function (bookings, hotel_id, room_type) {
     var currBookings = bookings.filter(function (booking) {
         return booking.hotelId == hotel_id && booking.roomType == room_type;
@@ -40,7 +34,34 @@ var parseBookings = function (hotel_id, room_type, bookings, arrival, departure)
         return bookedRooms(currBookings, arrival);
     }
 };
-var hotel = searchHotels(args[2], hotels);
-var room = searchRooms(args[3], hotel.rooms);
-var booking = parseBookings(hotel.id, room[0].roomType, bookings, args[4]);
-console.log(booking);
+// const hotel = searchHotels(args[2], hotels);
+// const room = searchRooms(args[3], hotel.rooms);
+// const booking = parseBookings(hotel.id, room[0].roomType, bookings, args[4]);
+var app = function (args) {
+    // '-hotel'
+    // '-date'
+    // '-room'
+    // '-help'
+    // Check if the user wants help
+    var help = args.filter(function (arg) {
+        return arg === "-help" || arg === "-h";
+    });
+    // If the -help or -h flags are passed the user wants help
+    // if no arguments are passed also display app usage
+    if (help.length > 0 || args.length === 0) {
+        (0, parsearguments_1.displayHelp)();
+        return;
+    }
+    // Check that valid parameters exist
+    var hotel = (0, parsearguments_1.checkArgs)(args, "-hotel");
+    var date = (0, parsearguments_1.checkArgs)(args, "-date");
+    var room = (0, parsearguments_1.checkArgs)(args, "-room");
+    if (hotel === undefined || date === undefined || room === undefined) {
+        console.log("No all parameters were valid, see below for help");
+        (0, parsearguments_1.displayHelp)();
+    }
+    var roomsHotel = (0, parsebookings_1.checkHotel)(hotel, room, hotels);
+    console.log(roomsHotel);
+    return args[0];
+};
+app(args.slice(2));
