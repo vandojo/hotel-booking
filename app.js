@@ -4,39 +4,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var hotels = require("./data/hotels.json");
 var bookings = require("./data/bookings.json");
 var args = process.argv;
+//import { Room, RoomType, Hotel, Booking } from "./types";
 var parsearguments_1 = require("./parsearguments");
 var parsebookings_1 = require("./parsebookings");
-var getBookings = function (bookings, hotel_id, room_type) {
-    var currBookings = bookings.filter(function (booking) {
-        return booking.hotelId == hotel_id && booking.roomType == room_type;
-    });
-    return currBookings;
-};
-var bookedRooms = function (bookings, arrival, departure) {
-    var books;
-    if (departure === undefined) {
-        books = bookings.filter(function (booking) {
-            return (parseInt(booking.departure) <= parseInt(arrival) ||
-                parseInt(booking.arrival) > parseInt(arrival));
-        });
-    }
-    if (departure !== undefined) {
-        books = bookings.filter(function (booking) { return parseInt(booking.arrival) >= parseInt(departure); });
-    }
-    return books;
-};
-var parseBookings = function (hotel_id, room_type, bookings, arrival, departure) {
-    var currBookings = getBookings(bookings, hotel_id, room_type);
-    if (departure !== undefined) {
-        return bookedRooms(currBookings, arrival, departure);
-    }
-    else {
-        return bookedRooms(currBookings, arrival);
-    }
-};
-// const hotel = searchHotels(args[2], hotels);
-// const room = searchRooms(args[3], hotel.rooms);
-// const booking = parseBookings(hotel.id, room[0].roomType, bookings, args[4]);
+var checkbooking_1 = require("./checkbooking");
 var app = function (args) {
     // '-hotel'
     // '-date'
@@ -54,14 +25,26 @@ var app = function (args) {
     }
     // Check that valid parameters exist
     var hotel = (0, parsearguments_1.checkArgs)(args, "-hotel");
-    var date = (0, parsearguments_1.checkArgs)(args, "-date");
+    var arrival = (0, parsearguments_1.checkArgs)(args, "-arrival");
+    var departure = (0, parsearguments_1.checkArgs)(args, "-departure");
     var room = (0, parsearguments_1.checkArgs)(args, "-room");
-    if (hotel === undefined || date === undefined || room === undefined) {
+    if (hotel === undefined || arrival === undefined || room === undefined) {
         console.log("No all parameters were valid, see below for help");
         (0, parsearguments_1.displayHelp)();
     }
     var roomsHotel = (0, parsebookings_1.checkHotel)(hotel, room, hotels);
-    console.log(roomsHotel);
+    if (roomsHotel === undefined) {
+        console.log("The hotel does not have rooms of that type");
+        return;
+    }
+    var availableRooms;
+    if (departure === undefined) {
+        availableRooms = (0, checkbooking_1.parseBookings)(hotel, room, roomsHotel, bookings, arrival);
+    }
+    else {
+        availableRooms = (0, checkbooking_1.parseBookings)(hotel, room, roomsHotel, bookings, arrival, departure);
+    }
+    console.log(availableRooms);
     return args[0];
 };
 app(args.slice(2));

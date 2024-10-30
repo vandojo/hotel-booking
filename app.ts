@@ -4,18 +4,12 @@ const bookings = require("./data/bookings.json");
 
 const args = process.argv;
 
-//import { Room, RoomType, Hotel, Booking } from "./types";
-
 import { displayHelp, checkArgs } from "./parsearguments";
 import { checkHotel } from "./parsebookings";
 
 import { parseBookings } from "./checkbooking";
 
 const app = (args: string[]): any => {
-  // '-hotel'
-  // '-date'
-  // '-room'
-  // '-help'
   // Check if the user wants help
   let help = args.filter((arg) => {
     return arg === "-help" || arg === "-h";
@@ -30,9 +24,11 @@ const app = (args: string[]): any => {
 
   // Check that valid parameters exist
   const hotel = checkArgs(args, "-hotel");
-  const date = checkArgs(args, "-date");
+  const arrival = checkArgs(args, "-arrival");
+  const departure = checkArgs(args, "-departure");
   const room = checkArgs(args, "-room");
-  if (hotel === undefined || date === undefined || room === undefined) {
+
+  if (hotel === undefined || arrival === undefined || room === undefined) {
     console.log("No all parameters were valid, see below for help");
     displayHelp();
   }
@@ -43,7 +39,22 @@ const app = (args: string[]): any => {
     return;
   }
 
-  console.log(roomsHotel);
+  let availableRooms;
+
+  if (departure === undefined) {
+    availableRooms = parseBookings(hotel, room, roomsHotel, bookings, arrival);
+  } else {
+    availableRooms = parseBookings(
+      hotel,
+      room,
+      roomsHotel,
+      bookings,
+      arrival,
+      departure
+    );
+  }
+
+  console.log(availableRooms);
   return args[0];
 };
 
