@@ -4,9 +4,11 @@ exports.checkArgs = exports.displayHelp = void 0;
 var displayHelp = function () {
     console.log("This app allows the user to check room availability for: \na specified hotel \ndate range \nroom type");
     console.log("for help type: node app.js -help ");
-    console.log("To get availability type:");
-    console.log("node app.js -hotel <hotelname> -date <date> -room <roomtype>");
-    console.log("For example: node app.js -hotel H1 -date 20240901 -room SGL");
+    console.log("Program needs a hotels.json and bookings.json file");
+    console.log("To run the program, do:");
+    console.log("node app.js -hotels ./data/hotels.json -bookings ./data/bookings.json");
+    console.log("At the prompt, enter hotel arrival-departure room");
+    console.log("For example: H1 20240901-20240903 SGL");
     return;
 };
 exports.displayHelp = displayHelp;

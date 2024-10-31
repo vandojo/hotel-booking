@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.parseBookings = void 0;
+exports.checkBooking = void 0;
 var getBookings = function (bookings, hotel_id, room_type) {
     var currBookings = bookings.filter(function (booking) {
         return booking.hotelId == hotel_id && booking.roomType == room_type;
@@ -24,7 +24,7 @@ var bookedRooms = function (bookings, arrival, departure) {
     }
     return books;
 };
-var parseBookings = function (hotel_id, room_type, rooms, bookings, arrival, departure) {
+var checkBooking = function (hotel_id, room_type, rooms, bookings, arrival, departure) {
     var currBookings = getBookings(bookings, hotel_id, room_type);
     // return all rooms if no bookings have been made
     if (currBookings.length < 1) {
@@ -32,7 +32,6 @@ var parseBookings = function (hotel_id, room_type, rooms, bookings, arrival, dep
     }
     var overlappingBookings;
     if (departure === undefined) {
-        console.log("these results are more trustworthy when you supply an intended departure date");
         overlappingBookings = bookedRooms(currBookings, arrival);
     }
     else {
@@ -49,4 +48,4 @@ var parseBookings = function (hotel_id, room_type, rooms, bookings, arrival, dep
         return amtRooms <= 0 ? [] : rooms.slice(amtRooms);
     }
 };
-exports.parseBookings = parseBookings;
+exports.checkBooking = checkBooking;

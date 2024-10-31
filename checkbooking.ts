@@ -38,7 +38,7 @@ const bookedRooms = (
   return books;
 };
 
-const parseBookings = (
+const checkBooking = (
   hotel_id: string,
   room_type: string,
   rooms: Room[],
@@ -54,9 +54,6 @@ const parseBookings = (
 
   let overlappingBookings;
   if (departure === undefined) {
-    console.log(
-      "these results are more trustworthy when you supply an intended departure date"
-    );
     overlappingBookings = bookedRooms(currBookings, arrival);
   } else {
     overlappingBookings = bookedRooms(currBookings, arrival, departure);
@@ -75,4 +72,4 @@ const parseBookings = (
   }
 };
 
-export { parseBookings };
+export { checkBooking };
